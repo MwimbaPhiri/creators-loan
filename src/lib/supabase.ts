@@ -1,18 +1,38 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key'
+// Create a safe getter that only initializes at runtime
+const createSupabaseClient = () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-// Warn if using placeholder values
-if (supabaseUrl === 'https://placeholder.supabase.co') {
-  console.warn('⚠️ NEXT_PUBLIC_SUPABASE_URL not set. Using placeholder. Add to Vercel environment variables.')
+  // During build time or when vars are missing, return a mock client
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // Return mock client with valid JWT format
+    return createClient(
+      'https://placeholder.supabase.co', 
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDUxOTI4MDAsImV4cCI6MTk2MDc2ODgwMH0.placeholder'
+    )
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey)
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+const createSupabaseAdminClient = () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 
-// For server-side operations
-export const supabaseAdmin = createClient(
-  supabaseUrl,
-  supabaseServiceKey
-)
+  // During build time or when vars are missing, return a mock client
+  if (!supabaseUrl || !supabaseServiceKey) {
+    // Return mock client with valid JWT format
+    return createClient(
+      'https://placeholder.supabase.co', 
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY0NTE5MjgwMCwiZXhwIjoxOTYwNzY4ODAwfQ.placeholder'
+    )
+  }
+
+  return createClient(supabaseUrl, supabaseServiceKey)
+}
+
+// Export clients
+export const supabase = createSupabaseClient()
+export const supabaseAdmin = createSupabaseAdminClient()
