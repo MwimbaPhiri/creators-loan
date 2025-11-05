@@ -313,22 +313,20 @@ export default function Home() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => router.push('/')}
-                className="flex items-center gap-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Home
-              </Button>
-              <div>
-                <h1 className="text-4xl font-bold text-slate-900 mb-2">Creator Coin Loans</h1>
-                <p className="text-slate-600">Get USDC loans backed by your Zora creator coins</p>
-              </div>
-            </div>
+          <div className="flex justify-between items-center gap-4 mb-6">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push('/')}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </Button>
+          </div>
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">Creator Coin Loans</h1>
+            <p className="text-slate-600">Get USDC loans backed by your Zora creator coins</p>
           </div>
         </header>
 
