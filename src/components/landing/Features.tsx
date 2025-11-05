@@ -1,60 +1,48 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Zap, Shield, TrendingUp, Coins } from 'lucide-react'
 
 const features = [
   {
-    icon: <Zap className="w-6 h-6" />,
-    title: 'Instant Approval',
-    description: 'Get approved in minutes with AI-powered risk assessment',
-    color: 'from-yellow-500 to-orange-500'
+    icon: <Zap className="w-5 h-5" />,
+    title: 'Instant',
+    description: 'Minutes, not days'
   },
   {
-    icon: <Shield className="w-6 h-6" />,
-    title: 'Secure Collateral',
-    description: 'Your creator coins are safely held in escrow smart contracts',
-    color: 'from-blue-500 to-cyan-500'
+    icon: <Shield className="w-5 h-5" />,
+    title: 'Secure',
+    description: 'Smart contract escrow'
   },
   {
-    icon: <TrendingUp className="w-6 h-6" />,
-    title: 'Low Interest Rates',
-    description: 'Starting at 5% APR with flexible repayment terms',
-    color: 'from-green-500 to-emerald-500'
+    icon: <TrendingUp className="w-5 h-5" />,
+    title: 'Low Rates',
+    description: 'Starting at 5% APR'
   },
   {
-    icon: <Coins className="w-6 h-6" />,
-    title: 'Keep Your Coins',
-    description: 'Maintain ownership while accessing liquidity',
-    color: 'from-purple-500 to-pink-500'
+    icon: <Coins className="w-5 h-5" />,
+    title: 'Keep Coins',
+    description: 'Maintain ownership'
   }
 ]
 
 export function Features() {
   return (
-    <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 relative">
-      <div className="max-w-7xl mx-auto">
+    <section id="features" className="py-32 px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <Badge className="mb-4 bg-purple-500/10 text-purple-400 border-purple-500/20">
-            Features
-          </Badge>
-          <h2 className="text-4xl font-bold mb-4">
-            Why Choose <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">CreatorLoan</span>
+          <h2 className="text-5xl font-bold text-white/90 mb-4">
+            Simple. Fast. Secure.
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            Built for creators, by creators. Experience the future of decentralized lending.
-          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.map((feature, index) => (
             <motion.div
               key={index}
@@ -62,15 +50,14 @@ export function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
             >
-              <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-slate-700 transition-all duration-300 backdrop-blur-sm h-full group">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+              <div className="p-8 bg-white/[0.02] border border-white/[0.05] rounded-2xl hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300 h-full group">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-6 text-white/70 group-hover:bg-white/10 group-hover:text-white transition-all">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
-                <p className="text-slate-400">{feature.description}</p>
-              </Card>
+                <h3 className="text-xl font-semibold mb-2 text-white/90">{feature.title}</h3>
+                <p className="text-white/40 text-sm">{feature.description}</p>
+              </div>
             </motion.div>
           ))}
         </div>

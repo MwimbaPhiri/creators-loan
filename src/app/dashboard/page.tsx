@@ -73,10 +73,7 @@ export default function Home() {
     creatorCoinAddress: "",
     requestedAmount: "",
     loanPurpose: "",
-    durationMonths: "12",
-    monthlyIncome: "",
-    employmentStatus: "",
-    creditScore: ""
+    durationMonths: "12"
   })
   const [calculatedRiskScore, setCalculatedRiskScore] = useState<number | null>(null)
 
@@ -279,10 +276,7 @@ export default function Home() {
           creatorCoinAddress: applicationForm.creatorCoinAddress,
           requestedAmount: parseFloat(applicationForm.requestedAmount),
           loanPurpose: applicationForm.loanPurpose,
-          durationMonths: parseInt(applicationForm.durationMonths),
-          monthlyIncome: parseFloat(applicationForm.monthlyIncome) || undefined,
-          employmentStatus: applicationForm.employmentStatus || undefined,
-          creditScore: parseInt(applicationForm.creditScore) || undefined
+          durationMonths: parseInt(applicationForm.durationMonths)
         })
       })
 
@@ -293,10 +287,7 @@ export default function Home() {
           creatorCoinAddress: "",
           requestedAmount: "",
           loanPurpose: "",
-          durationMonths: "12",
-          monthlyIncome: "",
-          employmentStatus: "",
-          creditScore: ""
+          durationMonths: "12"
         })
         setCoinValidation(null)
         setCoinAddress("")
@@ -448,17 +439,17 @@ export default function Home() {
                   <CardDescription>Competitive rates for creators</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="p-4 bg-blue-50 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">10% Loan-to-Value</h4>
-                    <p className="text-sm text-blue-700">Borrow up to 10% of your creator coin's market cap</p>
+                  <div className="p-6 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+                    <h4 className="font-semibold text-slate-900 mb-2">10% Loan-to-Value</h4>
+                    <p className="text-sm text-slate-600">Borrow up to 10% of your creator coin's market cap</p>
                   </div>
-                  <div className="p-4 bg-green-50 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">20% Collateral</h4>
-                    <p className="text-sm text-green-700">Only 20% of coin value required as collateral</p>
+                  <div className="p-6 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+                    <h4 className="font-semibold text-slate-900 mb-2">20% Collateral</h4>
+                    <p className="text-sm text-slate-600">Only 20% of coin value required as collateral</p>
                   </div>
-                  <div className="p-4 bg-purple-50 rounded-lg">
-                    <h4 className="font-semibold text-purple-900 mb-2">5% Base Rate</h4>
-                    <p className="text-sm text-purple-700">Low interest rates with risk-based adjustments</p>
+                  <div className="p-6 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
+                    <h4 className="font-semibold text-slate-900 mb-2">5% Base Rate</h4>
+                    <p className="text-sm text-slate-600">Low interest rates with risk-based adjustments</p>
                   </div>
                 </CardContent>
               </Card>
@@ -653,48 +644,7 @@ export default function Home() {
                       </Select>
                     </div>
 
-                    <Separator />
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="monthlyIncome">Monthly Income ($)</Label>
-                        <Input
-                          id="monthlyIncome"
-                          type="number"
-                          placeholder="3000"
-                          value={applicationForm.monthlyIncome}
-                          onChange={(e) => setApplicationForm({...applicationForm, monthlyIncome: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="creditScore">Credit Score</Label>
-                        <Input
-                          id="creditScore"
-                          type="number"
-                          placeholder="720"
-                          value={applicationForm.creditScore}
-                          onChange={(e) => setApplicationForm({...applicationForm, creditScore: e.target.value})}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="employmentStatus">Employment Status</Label>
-                      <Select value={applicationForm.employmentStatus} onValueChange={(value) => setApplicationForm({...applicationForm, employmentStatus: value})}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="full-time">Full-time</SelectItem>
-                          <SelectItem value="part-time">Part-time</SelectItem>
-                          <SelectItem value="freelance">Freelance</SelectItem>
-                          <SelectItem value="unemployed">Unemployed</SelectItem>
-                          <SelectItem value="student">Student</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <Button onClick={submitApplication} className="w-full">
+                    <Button onClick={submitApplication} className="w-full mt-6">
                       Submit Application
                     </Button>
                   </CardContent>
