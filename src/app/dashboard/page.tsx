@@ -564,7 +564,10 @@ export default function Home() {
 
                         {coinValidation.eligibleForLoan && (
                           <Button 
-                            onClick={() => setActiveTab("apply")}
+                            onClick={() => {
+                              setMainTab("get-loan")
+                              setLoanFlowStep("apply")
+                            }}
                             className="w-full"
                           >
                             Apply for Loan
