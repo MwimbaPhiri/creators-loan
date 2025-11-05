@@ -61,7 +61,9 @@ interface Loan {
 
 export default function Home() {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState("overview")
+  const [mainTab, setMainTab] = useState("profile")
+  const [profileTab, setProfileTab] = useState("overview")
+  const [loanFlowStep, setLoanFlowStep] = useState("check")
   const [walletConnected, setWalletConnected] = useState(false)
   const [walletAddress, setWalletAddress] = useState("")
   const [coinAddress, setCoinAddress] = useState("")
@@ -291,7 +293,8 @@ export default function Home() {
         })
         setCoinValidation(null)
         setCoinAddress("")
-        setActiveTab("applications")
+        setMainTab("profile")
+        setProfileTab("applications")
       }
     } catch (error) {
       console.error('Error submitting application:', error)
@@ -329,18 +332,39 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Main Content */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="check">Check Eligibility</TabsTrigger>
-            <TabsTrigger value="apply">Apply</TabsTrigger>
-            <TabsTrigger value="applications">Applications</TabsTrigger>
-            <TabsTrigger value="loans">My Loans</TabsTrigger>
-          </TabsList>
+        {/* Main Navigation */}
+        <div className="mb-8">
+          <div className="flex gap-4 border-b border-slate-200">
+            <button
+              onClick={() => setMainTab("profile")}
+              className={`px-6 py-3 font-semibold transition-all relative ${
+                mainTab === "profile"
+                  ? "text-slate-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-600"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Profile
+            </button>
+            <button
+              onClick={() => {
+                setMainTab("get-loan")
+                setLoanFlowStep("check")
+              }}
+              className={`px-6 py-3 font-semibold transition-all relative ${
+                mainTab === "get-loan"
+                  ? "text-slate-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-600"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Get Loan
+            </button>
+          </div>
+        </div>
 
-          {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
+        {/* Profile Tab Content */}
+        {mainTab === "profile" && (
+          <div className="space-y-6">
+            {/* Profile Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -381,11 +405,22 @@ export default function Home() {
                   <Shield className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">10% LTV</div>
+                  <div className="text-2xl font-bold">3% LTV</div>
                   <p className="text-xs text-muted-foreground">20% collateral</p>
                 </CardContent>
               </Card>
             </div>
+
+            {/* Profile Sub-tabs */}
+            <Tabs value={profileTab} onValueChange={setProfileTab} className="space-y-6">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="applications">Applications</TabsTrigger>
+                <TabsTrigger value="loans">My Loans</TabsTrigger>
+              </TabsList>
+
+              {/* Overview Tab */}
+              <TabsContent value="overview" className="space-y-6">
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
@@ -829,8 +864,283 @@ export default function Home() {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
-        </Tabs>
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
+
+        {/* Get Loan Tab Content */}
+        {mainTab === "get-loan" && (
+          <div className="space-y-6">
+            {/* Loan Flow Steps Indicator */}
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className={`flex items-center gap-2 ${loanFlowStep === "check" ? "text-blue-600" : "text-slate-400"}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${loanFlowStep === "check" ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-400"}`}>
+                  1
+                </div>
+                <span className="font-medium">Check Eligibility</span>
+              </div>
+              <div className="w-12 h-px bg-slate-200" />
+              <div className={`flex items-center gap-2 ${loanFlowStep === "apply" ? "text-blue-600" : "text-slate-400"}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${loanFlowStep === "apply" ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-400"}`}>
+                  2
+                </div>
+                <span className="font-medium">Apply for Loan</span>
+              </div>
+            </div>
+
+            {/* Check Eligibility Step */}
+            {loanFlowStep === "check" && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Check Creator Coin</CardTitle>
+                    <CardDescription>Verify if your coin is eligible for loans</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label htmlFor="coinAddress">Creator Coin Address</Label>
+                      <Input
+                        id="coinAddress"
+                        placeholder="0x..."
+                        value={coinAddress}
+                        onChange={(e) => setCoinAddress(e.target.value)}
+                      />
+                    </div>
+                    <Button 
+                      onClick={validateCreatorCoin} 
+                      disabled={!coinAddress || validatingCoin}
+                      className="w-full"
+                    >
+                      {validatingCoin ? 'Validating...' : 'Check Eligibility'}
+                    </Button>
+
+                    {coinValidation && (
+                      <div className="space-y-4">
+                        <Separator />
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-slate-600">Market Cap:</span>
+                            <span className="font-semibold">{formatCurrency(coinValidation.marketCap)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-600">Current Price:</span>
+                            <span className="font-semibold">${coinValidation.currentPrice}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-600">Max Loan Amount:</span>
+                            <span className="font-semibold text-green-600">{formatCurrency(coinValidation.maxLoanAmount)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-600">Required Collateral:</span>
+                            <span className="font-semibold">{formatCurrency(coinValidation.requiredCollateral)}</span>
+                          </div>
+                          {calculatedRiskScore !== null && (
+                            <div className="flex justify-between">
+                              <span className="text-slate-600">Risk Score:</span>
+                              <span className={`font-semibold ${
+                                calculatedRiskScore < 30 ? 'text-green-600' : 
+                                calculatedRiskScore < 60 ? 'text-yellow-600' : 
+                                'text-red-600'
+                              }`}>
+                                {calculatedRiskScore}/100 {
+                                  calculatedRiskScore < 30 ? '(Low Risk)' : 
+                                  calculatedRiskScore < 60 ? '(Medium Risk)' : 
+                                  '(High Risk)'
+                                }
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <Alert className={coinValidation.eligibleForLoan ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}>
+                          <CheckCircle className="h-4 w-4" />
+                          <AlertDescription className={coinValidation.eligibleForLoan ? "text-green-700" : "text-red-700"}>
+                            {coinValidation.eligibleForLoan 
+                              ? "Your creator coin is eligible for loans!" 
+                              : "Coin does not meet minimum requirements ($10,000 market cap)"}
+                          </AlertDescription>
+                        </Alert>
+
+                        {coinValidation.eligibleForLoan && (
+                          <Button 
+                            onClick={() => setLoanFlowStep("apply")}
+                            className="w-full"
+                          >
+                            Continue to Apply
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Eligibility Requirements</CardTitle>
+                    <CardDescription>Minimum criteria for creator coins</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <div>
+                          <h4 className="font-semibold">Market Cap</h4>
+                          <p className="text-sm text-slate-600">Minimum $10,000 market cap</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <div>
+                          <h4 className="font-semibold">Verified on Zora</h4>
+                          <p className="text-sm text-slate-600">Must be a valid Zora creator coin</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <div>
+                          <h4 className="font-semibold">Liquidity</h4>
+                          <p className="text-sm text-slate-600">Sufficient trading volume</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    <div className="p-4 bg-slate-50 rounded-lg">
+                      <h4 className="font-semibold mb-2">Loan Terms</h4>
+                      <ul className="text-sm space-y-1">
+                        <li>• 3% of market cap as loan amount (30% of 10%)</li>
+                        <li>• 20% of market cap as collateral</li>
+                        <li>• 5% base interest rate</li>
+                        <li>• 6-36 month repayment terms</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Apply Step */}
+            {loanFlowStep === "apply" && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Apply for Loan</CardTitle>
+                    <CardDescription>Get USDC backed by your creator coins</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setLoanFlowStep("check")}
+                      className="mb-4"
+                    >
+                      <ArrowLeft className="w-4 h-4 mr-2" />
+                      Back to Eligibility
+                    </Button>
+
+                    <div>
+                      <Label htmlFor="creatorCoin">Creator Coin Address</Label>
+                      <Input
+                        id="creatorCoin"
+                        placeholder="0x..."
+                        value={applicationForm.creatorCoinAddress}
+                        onChange={(e) => setApplicationForm({...applicationForm, creatorCoinAddress: e.target.value})}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="requestedAmount">Loan Amount ($)</Label>
+                      <Input
+                        id="requestedAmount"
+                        type="number"
+                        placeholder="5000"
+                        value={applicationForm.requestedAmount}
+                        onChange={(e) => setApplicationForm({...applicationForm, requestedAmount: e.target.value})}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="loanPurpose">Loan Purpose</Label>
+                      <Textarea
+                        id="loanPurpose"
+                        placeholder="Describe what you need the loan for..."
+                        value={applicationForm.loanPurpose}
+                        onChange={(e) => setApplicationForm({...applicationForm, loanPurpose: e.target.value})}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="durationMonths">Loan Duration</Label>
+                      <Select value={applicationForm.durationMonths} onValueChange={(value) => setApplicationForm({...applicationForm, durationMonths: value})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="6">6 months</SelectItem>
+                          <SelectItem value="12">12 months</SelectItem>
+                          <SelectItem value="24">24 months</SelectItem>
+                          <SelectItem value="36">36 months</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <Button onClick={submitApplication} className="w-full mt-6">
+                      Submit Application
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Loan Summary</CardTitle>
+                    <CardDescription>Your loan terms at a glance</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {applicationForm.requestedAmount && (
+                      <div className="p-4 bg-slate-50 rounded-lg">
+                        <h4 className="font-semibold mb-2">Loan Details</h4>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span>Loan Amount:</span>
+                            <span className="font-semibold">{formatCurrency(parseFloat(applicationForm.requestedAmount))}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Collateral Required:</span>
+                            <span className="font-semibold">{formatCurrency(parseFloat(applicationForm.requestedAmount) * 2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Interest Rate:</span>
+                            <span className="font-semibold">5.5% APR</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Duration:</span>
+                            <span className="font-semibold">{applicationForm.durationMonths} months</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Est. Monthly Payment:</span>
+                            <span className="font-semibold">
+                              {formatCurrency(parseFloat(applicationForm.requestedAmount) * 0.09)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <Alert>
+                      <Shield className="h-4 w-4" />
+                      <AlertDescription>
+                        Your creator coins will be securely held as collateral. Once you repay the loan, your coins will be returned.
+                      </AlertDescription>
+                    </Alert>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
