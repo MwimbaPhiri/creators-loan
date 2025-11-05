@@ -40,7 +40,7 @@ const howItWorks = [
   {
     step: '03',
     title: 'Apply for Loan',
-    description: 'Borrow up to 10% of your coin\'s market cap with only 20% collateral required'
+    description: 'Borrow up to 3% of your coin\'s market cap (30% of 10%) with only 20% collateral required'
   },
   {
     step: '04',
@@ -52,8 +52,8 @@ const howItWorks = [
 const loanTerms = [
   {
     label: 'Loan-to-Value',
-    value: '10%',
-    description: 'Borrow up to 10% of market cap'
+    value: '3%',
+    description: 'Borrow up to 3% of market cap'
   },
   {
     label: 'Collateral Required',

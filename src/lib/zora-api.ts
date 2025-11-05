@@ -232,8 +232,8 @@ export class ZoraAPI {
       const minMarketCap = 10000 // $10,000 minimum market cap
       const eligibleForLoan = marketCap >= minMarketCap && !coinData.platformBlocked
 
-      // Calculate loan terms: 10% loan value for 20% collateral
-      const maxLoanAmount = marketCap * 0.10 // 10% of market cap
+      // Calculate loan terms: 3% loan value (30% of 10%) for 20% collateral
+      const maxLoanAmount = marketCap * 0.03 // 3% of market cap (30% of 10%)
       const requiredCollateral = marketCap * 0.20 // 20% of market cap
 
       return {

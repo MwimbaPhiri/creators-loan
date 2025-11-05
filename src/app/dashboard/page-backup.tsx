@@ -61,7 +61,9 @@ interface Loan {
 
 export default function Home() {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState("overview")
+  const [mainTab, setMainTab] = useState("profile") // profile or get-loan
+  const [profileTab, setProfileTab] = useState("overview") // overview, applications, loans
+  const [loanFlowStep, setLoanFlowStep] = useState("check") // check or apply
   const [walletConnected, setWalletConnected] = useState(false)
   const [walletAddress, setWalletAddress] = useState("")
   const [coinAddress, setCoinAddress] = useState("")
@@ -306,7 +308,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+    <div className="min-h-screen bg-[#1a1a1a] p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="mb-8">
@@ -322,8 +324,8 @@ export default function Home() {
                 Back to Home
               </Button>
               <div>
-                <h1 className="text-4xl font-bold text-slate-900 mb-2">Creator Coin Loans</h1>
-                <p className="text-slate-600">Get USDC loans backed by your Zora creator coins</p>
+                <h1 className="text-4xl font-bold text-white/90 mb-2">Creator Coin Loans</h1>
+                <p className="text-white/60">Get USDC loans backed by your Zora creator coins</p>
               </div>
             </div>
           </div>
@@ -331,7 +333,7 @@ export default function Home() {
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-5 bg-white/[0.05] border border-white/10">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="check">Check Eligibility</TabsTrigger>
             <TabsTrigger value="apply">Apply</TabsTrigger>
@@ -439,17 +441,17 @@ export default function Home() {
                   <CardDescription>Competitive rates for creators</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="p-6 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
-                    <h4 className="font-semibold text-slate-900 mb-2">3% Loan-to-Value</h4>
-                    <p className="text-sm text-slate-600">Borrow up to 3% of your creator coin's market cap (30% of 10%)</p>
+                  <div className="p-6 bg-white/[0.02] border border-white/[0.05] rounded-lg hover:border-white/10 transition-colors">
+                    <h4 className="font-semibold text-white/90 mb-2">3% Loan-to-Value</h4>
+                    <p className="text-sm text-white/60">Borrow up to 3% of your creator coin's market cap (30% of 10%)</p>
                   </div>
-                  <div className="p-6 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
-                    <h4 className="font-semibold text-slate-900 mb-2">20% Collateral</h4>
-                    <p className="text-sm text-slate-600">Only 20% of coin value required as collateral</p>
+                  <div className="p-6 bg-white/[0.02] border border-white/[0.05] rounded-lg hover:border-white/10 transition-colors">
+                    <h4 className="font-semibold text-white/90 mb-2">20% Collateral</h4>
+                    <p className="text-sm text-white/60">Only 20% of coin value required as collateral</p>
                   </div>
-                  <div className="p-6 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-colors">
-                    <h4 className="font-semibold text-slate-900 mb-2">5% Base Rate</h4>
-                    <p className="text-sm text-slate-600">Low interest rates with risk-based adjustments</p>
+                  <div className="p-6 bg-white/[0.02] border border-white/[0.05] rounded-lg hover:border-white/10 transition-colors">
+                    <h4 className="font-semibold text-white/90 mb-2">5% Base Rate</h4>
+                    <p className="text-sm text-white/60">Low interest rates with risk-based adjustments</p>
                   </div>
                 </CardContent>
               </Card>
@@ -575,9 +577,9 @@ export default function Home() {
 
                     <Separator />
 
-                    <div className="p-4 bg-slate-50 rounded-lg">
-                      <h4 className="font-semibold mb-2">Loan Terms</h4>
-                      <ul className="text-sm space-y-1">
+                    <div className="p-4 bg-white/[0.02] border border-white/[0.05] rounded-lg">
+                      <h4 className="font-semibold mb-2 text-white/90">Loan Terms</h4>
+                      <ul className="text-sm space-y-1 text-white/60">
                         <li>• 3% of market cap as loan amount (30% of 10%)</li>
                         <li>• 20% of market cap as collateral</li>
                         <li>• 5% base interest rate</li>
